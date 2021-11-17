@@ -43,7 +43,7 @@ export class App {
   }
 
   listen(): void {
-    const port = process.env.PORT || 5000;
+    const port = process.env.PORT || 4000;
     this.app.listen(port, () => {
       logger.info(`App listening on port ${port}.`);
     });
