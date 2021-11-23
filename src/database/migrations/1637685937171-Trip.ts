@@ -1,11 +1,17 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class Currency1637668755510 implements MigrationInterface {
-  name = 'Currency1637668755510';
+export class Trip1637685937171 implements MigrationInterface {
+  name = 'Trip1637685937171';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE IF NOT EXISTS \`trip\` (\`id\` int NOT NULL AUTO_INCREMENT, \`busLicenceNumber\` varchar(255) NOT NULL, \`origin\` varchar(255) NOT NULL, \`destination\` varchar(255) NOT NULL, \`date\` timestamp NOT NULL, \`fare\` double NOT NULL, \`capacity\` int NOT NULL, \`bookedSeats\` text NOT NULL, \`image\` varchar(255) NOT NULL, \`images\` text NOT NULL, \`createdOn\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updatedOn\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`userId\` int NOT NULL, \`currencyId\` int NOT NULL, UNIQUE INDEX \`IDX_e77f0d7dab6a015cdcf8a05b12\` (\`busLicenceNumber\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+      `CREATE TABLE IF NOT EXISTS \`user\` (\`id\` int NOT NULL AUTO_INCREMENT, \`email\` varchar(255) NOT NULL, \`firstName\` varchar(255) NULL, \`lastName\` varchar(255) NULL, \`profileImage\` varchar(255) NULL, \`password\` varchar(255) NOT NULL, \`isAdmin\` tinyint NOT NULL DEFAULT 0, \`isVerified\` tinyint NOT NULL DEFAULT 0, \`createdOn\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updatedOn\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), UNIQUE INDEX \`IDX_e12875dfb3b1d92d7d7c5377e2\` (\`email\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE IF NOT EXISTS \`currency\` (\`id\` int NOT NULL AUTO_INCREMENT, \`name\` varchar(255) NOT NULL, \`initials\` varchar(255) NOT NULL, UNIQUE INDEX \`IDX_77f11186dd58a8d87ad5fff024\` (\`name\`), UNIQUE INDEX \`IDX_ff8c986b907a541e683e6ffab6\` (\`initials\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE IF NOT EXISTS \`trip\` (\`id\` int NOT NULL AUTO_INCREMENT, \`busLicenceNumber\` varchar(255) NOT NULL, \`origin\` varchar(255) NOT NULL, \`destination\` varchar(255) NOT NULL, \`date\` timestamp NOT NULL, \`fare\` double NOT NULL, \`capacity\` int NOT NULL, \`bookedSeats\` text NULL, \`image\` varchar(255) NULL, \`images\` text NULL, \`createdOn\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updatedOn\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`userId\` int NOT NULL, \`currencyId\` int NOT NULL, UNIQUE INDEX \`IDX_e77f0d7dab6a015cdcf8a05b12\` (\`busLicenceNumber\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
     );
     await queryRunner.query(
       `CREATE TABLE IF NOT EXISTS \`booking\` (\`id\` int NOT NULL AUTO_INCREMENT, \`seatNumber\` int NOT NULL, \`createdOn\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updatedOn\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`userId\` int NOT NULL, \`tripId\` int NOT NULL, UNIQUE INDEX \`IDX_2e55730fe22f26fed560063320\` (\`seatNumber\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
@@ -45,5 +51,10 @@ export class Currency1637668755510 implements MigrationInterface {
     await queryRunner.query(`DROP TABLE IF EXISTS \`booking\``);
     await queryRunner.query(`DROP INDEX IF EXISTS \`IDX_e77f0d7dab6a015cdcf8a05b12\` ON \`trip\``);
     await queryRunner.query(`DROP TABLE IF EXISTS \`trip\``);
+    await queryRunner.query(`DROP INDEX IF EXISTS \`IDX_ff8c986b907a541e683e6ffab6\` ON \`currency\``);
+    await queryRunner.query(`DROP INDEX IF EXISTS \`IDX_77f11186dd58a8d87ad5fff024\` ON \`currency\``);
+    await queryRunner.query(`DROP TABLE IF EXISTS \`currency\``);
+    await queryRunner.query(`DROP INDEX IF EXISTS \`IDX_e12875dfb3b1d92d7d7c5377e2\` ON \`user\``);
+    await queryRunner.query(`DROP TABLE IF EXISTS \`user\``);
   }
 }

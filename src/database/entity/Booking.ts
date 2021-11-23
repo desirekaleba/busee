@@ -6,12 +6,13 @@ import {
   ManyToOne,
   JoinColumn,
   Column,
+  BaseEntity,
 } from 'typeorm';
 import { User } from './User';
 import { Trip } from './Trip';
 
 @Entity()
-export class Booking {
+export class Booking extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

@@ -6,12 +6,13 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  BaseEntity,
 } from 'typeorm';
 import { Currency } from './Currency';
 import { User } from './User';
 
 @Entity()
-export class Trip {
+export class Trip extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -41,13 +42,13 @@ export class Trip {
   @Column({ nullable: false })
   capacity: number;
 
-  @Column('simple-array')
+  @Column('simple-array', { nullable: true })
   bookedSeats: number[];
 
-  @Column()
+  @Column({ nullable: true })
   image: string;
 
-  @Column('simple-array')
+  @Column('simple-array', { nullable: true })
   images: string[];
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)' })
