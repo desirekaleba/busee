@@ -1,9 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, BaseEntity } from 'typeorm';
 import { Trip } from './Trip';
 import { User } from './User';
 
 @Entity()
-export class Payment {
+export class Payment extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

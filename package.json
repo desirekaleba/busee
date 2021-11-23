@@ -17,7 +17,7 @@
       "lint:fix": "npm run lint -- --fix",
       "format": "prettier --ignore-path .gitignore --write \"**/*.+(ts|js|json)\"",
       "format:check": "prettier --ignore-path .gitignore --list-different \"**/*.+(ts|js|json)\"",
-      "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
+      "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js migration:generate -n Booking",
       "typeorm:cli": "ts-node ./node_modules/typeorm/cli -f ./ormconfig.js",
       "db:create": "npm run typeorm:cli -- migration:run",
       "db:drop": "npm run typeorm:cli -- schema:drop",
