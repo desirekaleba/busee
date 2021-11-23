@@ -1,9 +1,10 @@
 /* eslint-disable prettier/prettier */
 require('dotenv').config();
+const path = require('path');
 
 const { DB_USER, DB_HOST, DB_PASSWORD, DB_PORT, DEV_DB, PROD_DB, TEST_DB, NODE_ENV } = process.env;
 
-const dir = NODE_ENV === 'production' ? 'build' : 'src';
+const dir = NODE_ENV === 'production' ? path.join(__dirname, 'build') : path.join(__dirname, 'src');
 
 // eslint-disable-next-line no-nested-ternary
 const database = NODE_ENV === 'production' ? PROD_DB : NODE_ENV === 'test' ? TEST_DB : DEV_DB;
