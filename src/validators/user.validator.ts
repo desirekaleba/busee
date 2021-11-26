@@ -1,8 +1,8 @@
 import Joi from 'joi';
 import { Request, Response, NextFunction } from 'express';
-import { validatorHandler } from '../middlewares/validatorHandler';
+import { validatorHandler } from '../middlewares';
 
-const signup = (req: Request, res: Response, next: NextFunction) => {
+export const signup = (req: Request, res: Response, next: NextFunction) => {
   const schema = Joi.object().keys({
     email: Joi.string().email().required(),
     firstName: Joi.string().trim().alphanum().min(3).max(30),
@@ -16,8 +16,4 @@ const signup = (req: Request, res: Response, next: NextFunction) => {
     isVerified: Joi.bool(),
   });
   validatorHandler(req, res, next, schema);
-};
-
-export const userValidator = {
-  signup,
 };
