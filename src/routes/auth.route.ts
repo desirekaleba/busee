@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { IRoute } from '../interfaces/route.interface';
 import { AuthController } from '../controllers/auth.controller';
-import { asyncHandler } from '../middlewares/asyncHandler';
-import { userValidator } from '../validators/user.validator';
+import { asyncHandler, checkEmail } from '../middlewares';
+import { signup as signupValidator } from '../validators';
 
 export class AuthRoute implements IRoute {
   public path = '/auth';
@@ -14,6 +14,8 @@ export class AuthRoute implements IRoute {
   }
 
   private initializeRoutes() {
-    this.router.route(`${this.path}/signup`).post(userValidator.signup, asyncHandler(this.authController.signup));
+    this.router
+      .route(`${this.path}/signup`)
+      .post(signupValidator, asyncHandler(checkEmail), asyncHandler(this.authController.signup));
   }
 }
