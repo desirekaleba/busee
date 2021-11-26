@@ -17,3 +17,14 @@ export const signup = (req: Request, res: Response, next: NextFunction) => {
   });
   validatorHandler(req, res, next, schema);
 };
+
+export const signin = (req: Request, res: Response, next: NextFunction) => {
+  const schema = Joi.object().keys({
+    email: Joi.string().email().required(),
+    password: Joi.string()
+      .min(6)
+      .regex(/[a-zA-Z0-9]{6,30}/)
+      .required(),
+  });
+  validatorHandler(req, res, next, schema);
+};
