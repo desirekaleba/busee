@@ -4,6 +4,7 @@ import cors from 'cors';
 import { IRoute } from './interfaces/route.interface';
 import logger, { httpLogStream } from './utils/logger';
 import { OK } from './constants/statusCodes';
+import { success } from './utils/response';
 
 export class App {
   public app: express.Application;
@@ -33,11 +34,13 @@ export class App {
 
   private initializeDefaultRoutes(): void {
     this.app.get('/', (req: Request, res: Response) =>
-      res.status(OK).json({
-        status: `success`,
+      success({
+        code: OK,
+        message: 'Welcome',
         data: {
-          message: `Welcome to BUSEE`,
+          on: `Busee`,
         },
+        res,
       }),
     );
   }
