@@ -9,10 +9,10 @@
       "start": "cross-env NODE_ENV=production node build/index.js",
       "start:dev": "nodemon src/index.ts",
       "prepare": "husky install",
-      "pretest": "npm run db:drop:test && npm run db:create:test",
+      "pretest": "npm run db:drop:test",
       "test": "cross-env NODE_ENV=test jest --runInBand --detectOpenHandles --forceExit",
-      "test:watch": "jest --watch",
-      "test:cov": "jest --coverage",
+      "test:watch": "cross-env NODE_ENV=test npm run pretest && jest --watch --forceExit",
+      "test:cov": "cross-env NODE_ENV=test npm run pretest && jest --coverage --detectOpenHandles --forceExit",
       "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
       "lint:fix": "npm run lint -- --fix",
       "format": "prettier --ignore-path .gitignore --write \"**/*.+(ts|js|json)\"",
@@ -96,12 +96,18 @@
          "ts"
       ],
       "rootDir": "src",
-      "testRegex": ".*\\.spec\\.ts$",
+      "testRegex": ".*\\.test|.spec\\.(t|j)s$",
       "transform": {
          "^.+\\.(t|j)s$": "ts-jest"
       },
       "collectCoverageFrom": [
-         "**/*.(t|j)s"
+         "**/*.(t|j)s",
+         "!**/node_modules/**",
+         "!**/vendor/**"
+      ],
+      "coveragePathIgnorePatterns": [
+         "src/database/migrations/",
+         "src/utils/token.ts"
       ],
       "coverageDirectory": "../coverage",
       "testEnvironment": "node"

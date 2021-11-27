@@ -3,7 +3,8 @@ import logger from './logger';
 
 dotenv.config();
 
-const { DB_USER, DB_HOST, DB_PASSWORD, DB_PORT, DEV_DB, PROD_DB, TEST_DB, NODE_ENV, JWT_SECRET_KEY } = process.env;
+const { DB_USER, DB_HOST, DB_PASSWORD, DB_PORT, DEV_DB, PROD_DB, TEST_DB, NODE_ENV, JWT_SECRET_KEY, URL_PREFIX } =
+  process.env;
 
 const requiredCredentials = ['DB_USER', 'DB_HOST', 'DB_PASSWORD', 'DB_PORT', 'DEV_DB', 'JWT_SECRET_KEY'];
 
@@ -25,4 +26,5 @@ export default {
   PROD_DB,
   NODE_ENV,
   JWT_SECRET_KEY,
+  URL_PREFIX,
 };
