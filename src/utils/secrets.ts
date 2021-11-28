@@ -3,10 +3,33 @@ import logger from './logger';
 
 dotenv.config();
 
-const { DB_USER, DB_HOST, DB_PASSWORD, DB_PORT, DEV_DB, PROD_DB, TEST_DB, NODE_ENV, JWT_SECRET_KEY, URL_PREFIX } =
-  process.env;
+const {
+  DB_USER,
+  DB_HOST,
+  DB_PASSWORD,
+  DB_PORT,
+  DEV_DB,
+  PROD_DB,
+  TEST_DB,
+  NODE_ENV,
+  JWT_SECRET_KEY,
+  URL_PREFIX,
+  TWILIO_ACCOUNT_SID,
+  TWILIO_AUTH_TOKEN,
+  TWILIO_SERVICE_SID,
+} = process.env;
 
-const requiredCredentials = ['DB_USER', 'DB_HOST', 'DB_PASSWORD', 'DB_PORT', 'DEV_DB', 'JWT_SECRET_KEY'];
+const requiredCredentials = [
+  'DB_USER',
+  'DB_HOST',
+  'DB_PASSWORD',
+  'DB_PORT',
+  'DEV_DB',
+  'JWT_SECRET_KEY',
+  'TWILIO_ACCOUNT_SID',
+  'TWILIO_AUTH_TOKEN',
+  'TWILIO_SERVICE_SID',
+];
 
 // eslint-disable-next-line no-restricted-syntax
 for (const credential of requiredCredentials) {
@@ -27,4 +50,7 @@ export default {
   NODE_ENV,
   JWT_SECRET_KEY,
   URL_PREFIX,
+  TWILIO_ACCOUNT_SID,
+  TWILIO_AUTH_TOKEN,
+  TWILIO_SERVICE_SID,
 };

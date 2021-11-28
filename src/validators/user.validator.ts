@@ -28,3 +28,11 @@ export const signin = (req: Request, res: Response, next: NextFunction) => {
   });
   validatorHandler(req, res, next, schema);
 };
+
+export const verifyAccount = (req: Request, res: Response, next: NextFunction) => {
+  const schema = Joi.object().keys({
+    to: Joi.string().required(),
+    code: Joi.string().min(6).max(6).required(),
+  });
+  validatorHandler(req, res, next, schema);
+};
