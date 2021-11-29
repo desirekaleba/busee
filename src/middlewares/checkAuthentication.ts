@@ -6,7 +6,8 @@ import { IRequestWithAuth } from '../interfaces/requestWithAuth.interface';
 import { error } from '../utils/response';
 import secrets from '../utils/secrets';
 
-export const checkAuthentication = async (req: IRequestWithAuth, res: Response, next: NextFunction) => {
+// eslint-disable-next-line consistent-return
+export const checkAuthentication = (req: IRequestWithAuth, res: Response, next: NextFunction) => {
   const { authorization = '' } = req.headers;
   const token = authorization.split(' ')[1];
   if (!token) {
@@ -17,6 +18,7 @@ export const checkAuthentication = async (req: IRequestWithAuth, res: Response, 
     });
   }
 
+  // eslint-disable-next-line consistent-return
   jwt.verify(token, `${secrets.JWT_SECRET_KEY}`, async (err, decoded: any) => {
     if (err || !decoded) {
       return error({
@@ -25,11 +27,9 @@ export const checkAuthentication = async (req: IRequestWithAuth, res: Response, 
         res,
       });
     }
-
     const { id }: { id: number } = decoded;
-    const user = await userService.findById(id);
-
-    if (user === null) {
+    const user = await userService.findById(Number(id));
+    if (!user) {
       return error({
         code: UNAUTHORIZED,
         message: 'Please login.',
@@ -37,7 +37,6 @@ export const checkAuthentication = async (req: IRequestWithAuth, res: Response, 
       });
     }
     req.currentUser = user;
-    return next();
+    next();
   });
-  return next();
 };

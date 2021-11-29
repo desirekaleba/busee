@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { IRoute } from '../interfaces/route.interface';
 import { UserController } from '../controllers/user.controller';
-import { asyncHandler } from '../middlewares';
-import { getByEmail as getByEmailValidator } from '../validators';
+import { asyncHandler, checkAuthentication } from '../middlewares';
+import { getByEmail as getByEmailValidator, update as updateValidator } from '../validators';
 
 export class UserRoute implements IRoute {
   public path = '/user';
@@ -18,6 +18,10 @@ export class UserRoute implements IRoute {
       .route(`${this.path}/getByEmail`)
       .post(getByEmailValidator, asyncHandler(this.userController.getByEmail));
 
-    this.router.route(`${this.path}/:id`).get(asyncHandler(this.userController.getUserById));
+    this.router.route(`${this.path}/:id`).get(asyncHandler(this.userController.getById));
+
+    this.router
+      .route(`${this.path}/:id/update`)
+      .post(updateValidator, asyncHandler(checkAuthentication), asyncHandler(this.userController.updateById));
   }
 }
