@@ -31,10 +31,18 @@ export const signin = (req: Request, res: Response, next: NextFunction) => {
   validatorHandler(req, res, next, schema);
 };
 
+export const sendVerificationCode = (req: Request, res: Response, next: NextFunction) => {
+  const schema = Joi.object().keys({
+    to: Joi.string().trim().required(),
+    channel: Joi.string().trim().required(),
+  });
+  validatorHandler(req, res, next, schema);
+};
+
 export const verifyAccount = (req: Request, res: Response, next: NextFunction) => {
   const schema = Joi.object().keys({
     to: Joi.string().trim().required(),
-    code: Joi.string().min(6).max(6).required(),
+    code: Joi.string().trim().min(6).max(6).required(),
   });
   validatorHandler(req, res, next, schema);
 };

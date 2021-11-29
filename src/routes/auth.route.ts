@@ -6,6 +6,7 @@ import {
   signup as signupValidator,
   signin as signinValidator,
   verifyAccount as verifyAccountValidator,
+  sendVerificationCode as sendVerificationCodeValidator,
 } from '../validators';
 
 export class AuthRoute implements IRoute {
@@ -21,6 +22,10 @@ export class AuthRoute implements IRoute {
     this.router
       .route(`${this.path}/signup`)
       .post(signupValidator, asyncHandler(checkEmail), asyncHandler(this.authController.signup));
+
+    this.router
+      .route(`${this.path}/sendVerificationCode`)
+      .post(sendVerificationCodeValidator, asyncHandler(this.authController.sendVerificationCode));
 
     this.router
       .route(`${this.path}/verify`)
