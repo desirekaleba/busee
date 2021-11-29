@@ -11,6 +11,7 @@ import { SigninUserDTO } from '../dtos/signinUser.dto';
 import { TwilioService } from '../plugins/twilio';
 import { UserService } from '../database/services/user.service';
 
+import secrets from '../utils/secrets';
 /**
  * Auth Controller
  */
@@ -40,7 +41,9 @@ export class AuthController {
 
     const user = await this.authService.signup({ ...userData, password: hashedPassword });
 
-    await this.twilioService.sendVerificationCode(user.email, 'email');
+    if (secrets.NODE_ENV === 'production') {
+      await this.twilioService.sendVerificationCode(user.email, 'email');
+    }
 
     const token = generateToken(user.id);
 

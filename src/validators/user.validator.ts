@@ -36,3 +36,10 @@ export const verifyAccount = (req: Request, res: Response, next: NextFunction) =
   });
   validatorHandler(req, res, next, schema);
 };
+
+export const getByEmail = (req: Request, res: Response, next: NextFunction) => {
+  const schema = Joi.object().keys({
+    email: Joi.string().email().required(),
+  });
+  validatorHandler(req, res, next, schema);
+};
