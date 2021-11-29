@@ -16,7 +16,7 @@ beforeAll(async () => {
 });
 
 describe('User', () => {
-  describe('GET /user/getByEmail', () => {
+  describe('POST /user/getByEmail', () => {
     test('Should signup', async () => {
       const app = new App(routes).getServer();
       const res = supertest(app).post(`${secrets.URL_PREFIX}/auth/signup`).send(signupUser);
@@ -58,6 +58,24 @@ describe('User', () => {
       expect((await res).status).toBe(BAD_REQUEST);
       expect((await res).body.status).toBe('error');
       expect((await res).body.message).toBe('email must be a valid email');
+    });
+  });
+
+  describe('GET /user/:id', () => {
+    test('Should return a user', async () => {
+      const app = new App(routes).getServer();
+      const res = supertest(app).get(`${secrets.URL_PREFIX}/user/1`);
+      expect((await res).status).toBe(OK);
+      expect((await res).body.status).toBe('success');
+      expect((await res).body.data).toBeDefined();
+    });
+
+    test('Should not return a user due to user id not found', async () => {
+      const app = new App(routes).getServer();
+      const res = supertest(app).get(`${secrets.URL_PREFIX}/user/111`);
+      expect((await res).status).toBe(NOT_FOUND);
+      expect((await res).body.status).toBe('error');
+      expect((await res).body.data).not.toBeDefined();
     });
   });
 });

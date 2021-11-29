@@ -48,4 +48,30 @@ export class UserController {
       res,
     });
   };
+
+  getUserById = async (req: Request, res: Response): Promise<Response> => {
+    const { id } = req.params;
+    const user = await this.userService.findById(Number(id));
+    if (!user) {
+      return error({
+        code: NOT_FOUND,
+        message: notFound('User'),
+        res,
+      });
+    }
+    return success({
+      code: OK,
+      message: 'user found.',
+      data: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        profileImage: user.profileImage,
+        isVerified: user.isVerified,
+        createdOn: user.createdOn,
+      },
+      res,
+    });
+  };
 }
