@@ -6,6 +6,11 @@ export const signupData: CreateUserDTO = {
   password: '123456',
 };
 
+export const signupUser: CreateUserDTO = {
+  email: 'gloirekalebaba@gmail.com',
+  password: '123456',
+};
+
 export const signinData: SigninUserDTO = {
   email: 'desirekaleba@gmail.com',
   password: '123456',
