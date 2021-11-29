@@ -99,6 +99,32 @@ export class AuthController {
   };
 
   /**
+   * /**
+   * send verification code
+   * @param { req: Request}
+   * @param { res: Response }
+   * @returns Response
+   * @memberof AuthController
+   */
+  sendVerificationCode = async (req: Request, res: Response): Promise<Response> => {
+    const { to, channel } = req.body;
+    const details = await this.twilioService.sendVerificationCode(to, channel);
+    if (details) {
+      return success({
+        code: OK,
+        message: `Verification code sent to ${to}`,
+        data: details,
+        res,
+      });
+    }
+    return error({
+      code: SERVER_ERROR,
+      message: 'Could not send verification code. Please try again later.',
+      res,
+    });
+  };
+
+  /**
    * verify Account
    * @param { req: Request}
    * @param { res: Response }
