@@ -34,7 +34,7 @@ export class UserService {
    * @returns { User | null} - updated user
    * @memberof UserService
    */
-  update = async (id: number, updatedInfo: UpdateUserDTO): Promise<any> => {
+  update = async (id: number, updatedInfo: UpdateUserDTO): Promise<User | null> => {
     const user = await this.findById(id);
     if (user) {
       User.merge(user, updatedInfo);

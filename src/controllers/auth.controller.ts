@@ -122,15 +122,15 @@ export class AuthController {
     if (user && verifyUser.valid && verifyUser.status === 'approved') {
       const verifiedUser = await this.userService.update(user.id, { isVerified: true });
 
-      const token = generateToken(verifiedUser.id);
+      const token = generateToken(Number(verifiedUser?.id));
 
       return success({
         code: OK,
         message: updated('User'),
         data: {
           token,
-          email: verifiedUser.email,
-          isVerified: verifiedUser.isVerified,
+          email: verifiedUser?.email,
+          isVerified: verifiedUser?.isVerified,
         },
         res,
       });
