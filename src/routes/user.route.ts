@@ -17,5 +17,7 @@ export class UserRoute implements IRoute {
     this.router
       .route(`${this.path}/getByEmail`)
       .post(getByEmailValidator, asyncHandler(this.userController.getByEmail));
+
+    this.router.route(`${this.path}/:id`).get(asyncHandler(this.userController.getUserById));
   }
 }
