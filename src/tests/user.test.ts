@@ -135,7 +135,7 @@ describe('User', () => {
     });
   });
 
-  describe('POST /user/:id/update', () => {
+  describe('PUT /user/:id', () => {
     let token: string = 'Bearer ';
     test('Should signin', async () => {
       const app = new App(routes).getServer();
@@ -150,7 +150,7 @@ describe('User', () => {
     test('Should update the user', async () => {
       const app = new App(routes).getServer();
       const res = supertest(app)
-        .post(`${secrets.URL_PREFIX}/user/1/update`)
+        .put(`${secrets.URL_PREFIX}/user/1`)
         .send({ isAdmin: true })
         .set('Authorization', token);
       expect((await res).status).toBe(OK);
@@ -161,7 +161,7 @@ describe('User', () => {
 
     test('Should fail to update the user due to missing token', async () => {
       const app = new App(routes).getServer();
-      const res = supertest(app).post(`${secrets.URL_PREFIX}/user/1/update`).send({ isAdmin: true });
+      const res = supertest(app).put(`${secrets.URL_PREFIX}/user/1`).send({ isAdmin: true });
       expect((await res).status).toBe(UNAUTHORIZED);
       expect((await res).body.status).toBe('error');
       expect((await res).body.data).not.toBeDefined();
@@ -170,7 +170,7 @@ describe('User', () => {
     test('Should fail to update the user due to wrong token', async () => {
       const app = new App(routes).getServer();
       const res = supertest(app)
-        .post(`${secrets.URL_PREFIX}/user/1/update`)
+        .put(`${secrets.URL_PREFIX}/user/1`)
         .send({ isAdmin: true })
         .set(
           'Authorization',
@@ -179,6 +179,48 @@ describe('User', () => {
       expect((await res).status).toBe(UNAUTHORIZED);
       expect((await res).body.status).toBe('error');
       expect((await res).body.data).not.toBeDefined();
+    });
+  });
+
+  describe('DELETE /user/:id', () => {
+    let token: string = 'Bearer ';
+    test('Should signin', async () => {
+      const app = new App(routes).getServer();
+      const res = supertest(app).post(`${secrets.URL_PREFIX}/auth/signin`).send(signupUser);
+      expect((await res).status).toBe(OK);
+      expect((await res).body.data.token).toBeTruthy();
+      expect((await res).body.status).toBe('success');
+
+      token += (await res).body.data.token;
+    });
+
+    test('Should fail to delete the user due to missing token', async () => {
+      const app = new App(routes).getServer();
+      const res = supertest(app).delete(`${secrets.URL_PREFIX}/user/1`);
+      expect((await res).status).toBe(UNAUTHORIZED);
+      expect((await res).body.status).toBe('error');
+      expect((await res).body.data).not.toBeDefined();
+    });
+    test('Should fail to delete the user due to wrong token', async () => {
+      const app = new App(routes).getServer();
+      const res = supertest(app)
+        .delete(`${secrets.URL_PREFIX}/user/1`)
+        .set(
+          'Authorization',
+          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjM4MjE2NjYwLCJleHAiOjE2MzkwODA2NjB9.MkUJMl5skNqZ9XlYm_EHguoIANH7qKdxyeULBOjLFzY',
+        );
+      expect((await res).status).toBe(UNAUTHORIZED);
+      expect((await res).body.status).toBe('error');
+      expect((await res).body.data).not.toBeDefined();
+    });
+
+    test('Should delete the user', async () => {
+      const app = new App(routes).getServer();
+      const res = supertest(app).delete(`${secrets.URL_PREFIX}/user/1`).set('Authorization', token);
+      expect((await res).status).toBe(OK);
+      expect((await res).body.status).toBe('success');
+      expect((await res).body.data).toBeDefined();
+      expect((await res).body.data.isAdmin).toBeDefined();
     });
   });
 });
