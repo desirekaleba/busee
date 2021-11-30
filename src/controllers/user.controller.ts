@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { notFound } from '../constants/responseMessages';
+import { deleted, notFound } from '../constants/responseMessages';
 import { NOT_FOUND, OK, UNAUTHORIZED } from '../constants/statusCodes';
 import { UserService } from '../database/services/user.service';
 import { UpdateUserDTO } from '../dtos/updateUser.dto';
@@ -177,6 +177,47 @@ export class UserController {
         isVerified: updatedUser?.isVerified,
         createdOn: updatedUser?.createdOn,
         updatedOn: updatedUser?.updatedOn,
+      },
+      res,
+    });
+  };
+
+  /**
+   * delete user by id
+   * @param req: Request
+   * @param res: Response
+   * @returns deleted user
+   * @memberof UserController
+   */
+  deleteById = async (req: IRequestWithAuth, res: Response): Promise<Response> => {
+    const { id } = req.params;
+    const user = await this.userService.deleteById(Number(id));
+    if (!user) {
+      return error({
+        code: NOT_FOUND,
+        message: notFound('User'),
+        res,
+      });
+    }
+    if (req.currentUser.id !== Number(id)) {
+      return error({
+        code: UNAUTHORIZED,
+        message: `Oups! Can't help you with that. Please make sure you're deleting your account.`,
+        res,
+      });
+    }
+    return success({
+      code: OK,
+      message: deleted('User'),
+      data: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        profileImage: user.profileImage,
+        isAdmin: user.isAdmin,
+        isVerified: user.isVerified,
+        createdOn: user.createdOn,
       },
       res,
     });

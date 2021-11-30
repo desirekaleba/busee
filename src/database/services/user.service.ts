@@ -75,7 +75,7 @@ export class UserService {
    * @returns deleted user
    * @memberof UserService
    */
-  delete = async (id: number): Promise<User | null> => {
+  deleteById = async (id: number): Promise<User | null> => {
     const user = await this.findById(id);
     if (!user) {
       return null;
