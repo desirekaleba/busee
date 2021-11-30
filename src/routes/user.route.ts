@@ -27,7 +27,11 @@ export class UserRoute implements IRoute {
       .get(asyncHandler(checkAuthentication), asyncHandler(this.userController.getCurrent));
 
     this.router
-      .route(`${this.path}/:id/update`)
-      .post(updateValidator, asyncHandler(checkAuthentication), asyncHandler(this.userController.updateById));
+      .route(`${this.path}/:id`)
+      .put(updateValidator, asyncHandler(checkAuthentication), asyncHandler(this.userController.updateById));
+
+    this.router
+      .route(`${this.path}/:id`)
+      .delete(asyncHandler(checkAuthentication), asyncHandler(this.userController.deleteById));
   }
 }
