@@ -18,6 +18,22 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   /**
+   * find all users
+   * @param req: Request
+   * @param res: Response
+   * @returns users: Users[]
+   */
+  findAll = async (req: Request, res: Response): Promise<Response> => {
+    const users = await this.userService.findAll();
+    return success({
+      code: OK,
+      message: `Found ${users.length} user(s).`,
+      data: users,
+      res,
+    });
+  };
+
+  /**
    * get user by email
    * @param { req: Request }
    * @param { res: Response }

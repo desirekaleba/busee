@@ -16,6 +16,24 @@ beforeAll(async () => {
 });
 
 describe('User', () => {
+  describe('GET /user', () => {
+    test('Should get empty users', async () => {
+      const app = new App(routes).getServer();
+      const res = supertest(app).get(`${secrets.URL_PREFIX}/user`);
+      expect((await res).status).toBe(OK);
+      expect((await res).body.status).toBe('success');
+      expect((await res).body.data).toBeTruthy();
+      expect((await res).body.data.length).toBe(0);
+    });
+
+    test('Should fail to get User By Email due to user not found', async () => {
+      const app = new App(routes).getServer();
+      const res = supertest(app).post(`${secrets.URL_PREFIX}/user/getByEmail`).send({ email: 'des@gmail.com' });
+      expect((await res).status).toBe(NOT_FOUND);
+      expect((await res).body.status).toBe('error');
+    });
+  });
+
   describe('POST /user/getByEmail', () => {
     test('Should signup', async () => {
       const app = new App(routes).getServer();
@@ -24,6 +42,15 @@ describe('User', () => {
       expect((await res).body.status).toBe('success');
       expect((await res).body.data.token).toBeTruthy();
       expect((await res).body.data.email).toBe(signupUser.email);
+    });
+
+    test('Should get one user', async () => {
+      const app = new App(routes).getServer();
+      const res = supertest(app).get(`${secrets.URL_PREFIX}/user`);
+      expect((await res).status).toBe(OK);
+      expect((await res).body.status).toBe('success');
+      expect((await res).body.data).toBeTruthy();
+      expect((await res).body.data.length).toBe(1);
     });
 
     test('Should get User By Email', async () => {
