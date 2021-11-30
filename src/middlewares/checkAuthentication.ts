@@ -28,7 +28,7 @@ export const checkAuthentication = (req: IRequestWithAuth, res: Response, next: 
       });
     }
     const { id }: { id: number } = decoded;
-    const user = await userService.findById(Number(id));
+    const user = await userService.findById(id);
     if (!user) {
       return error({
         code: UNAUTHORIZED,
