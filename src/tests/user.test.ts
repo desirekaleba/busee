@@ -6,7 +6,7 @@ import secrets from '../utils/secrets';
 
 import { signupUser } from '../mocks/auth.mock';
 
-import { BAD_REQUEST, CREATED, NOT_FOUND, OK } from '../constants/statusCodes';
+import { BAD_REQUEST, CREATED, NOT_FOUND, OK, UNAUTHORIZED } from '../constants/statusCodes';
 
 import { initializeDB } from '../database/initializeDB';
 
@@ -64,7 +64,7 @@ describe('User', () => {
   describe('GET /user/:id', () => {
     test('Should return a user', async () => {
       const app = new App(routes).getServer();
-      const res = supertest(app).get(`${secrets.URL_PREFIX}/user/1`);
+      const res = supertest(app).get(`${secrets.URL_PREFIX}/user/1/getById`);
       expect((await res).status).toBe(OK);
       expect((await res).body.status).toBe('success');
       expect((await res).body.data).toBeDefined();
@@ -72,8 +72,84 @@ describe('User', () => {
 
     test('Should not return a user due to user id not found', async () => {
       const app = new App(routes).getServer();
-      const res = supertest(app).get(`${secrets.URL_PREFIX}/user/111`);
+      const res = supertest(app).get(`${secrets.URL_PREFIX}/user/111/getById`);
       expect((await res).status).toBe(NOT_FOUND);
+      expect((await res).body.status).toBe('error');
+      expect((await res).body.data).not.toBeDefined();
+    });
+  });
+
+  describe('GET /user/me', () => {
+    let token: string = 'Bearer ';
+    test('Should signin', async () => {
+      const app = new App(routes).getServer();
+      const res = supertest(app).post(`${secrets.URL_PREFIX}/auth/signin`).send(signupUser);
+      expect((await res).status).toBe(OK);
+      expect((await res).body.data.token).toBeTruthy();
+      expect((await res).body.status).toBe('success');
+
+      token += (await res).body.data.token;
+    });
+
+    test('Should return the current user', async () => {
+      const app = new App(routes).getServer();
+      const res = supertest(app).get(`${secrets.URL_PREFIX}/user/me`).set('Authorization', token);
+      expect((await res).status).toBe(OK);
+      expect((await res).body.status).toBe('success');
+      expect((await res).body.data).toBeDefined();
+    });
+
+    test('Should fail to get the user due to missing token', async () => {
+      const app = new App(routes).getServer();
+      const res = supertest(app).get(`${secrets.URL_PREFIX}/user/me`);
+      expect((await res).status).toBe(UNAUTHORIZED);
+      expect((await res).body.status).toBe('error');
+      expect((await res).body.data).not.toBeDefined();
+    });
+  });
+
+  describe('POST /user/:id/update', () => {
+    let token: string = 'Bearer ';
+    test('Should signin', async () => {
+      const app = new App(routes).getServer();
+      const res = supertest(app).post(`${secrets.URL_PREFIX}/auth/signin`).send(signupUser);
+      expect((await res).status).toBe(OK);
+      expect((await res).body.data.token).toBeTruthy();
+      expect((await res).body.status).toBe('success');
+
+      token += (await res).body.data.token;
+    });
+
+    test('Should update the user', async () => {
+      const app = new App(routes).getServer();
+      const res = supertest(app)
+        .post(`${secrets.URL_PREFIX}/user/1/update`)
+        .send({ isAdmin: true })
+        .set('Authorization', token);
+      expect((await res).status).toBe(OK);
+      expect((await res).body.status).toBe('success');
+      expect((await res).body.data).toBeDefined();
+      expect((await res).body.data.isAdmin).toBe(true);
+    });
+
+    test('Should fail to update the user due to missing token', async () => {
+      const app = new App(routes).getServer();
+      const res = supertest(app).post(`${secrets.URL_PREFIX}/user/1/update`).send({ isAdmin: true });
+      expect((await res).status).toBe(UNAUTHORIZED);
+      expect((await res).body.status).toBe('error');
+      expect((await res).body.data).not.toBeDefined();
+    });
+
+    test('Should fail to update the user due to wrong token', async () => {
+      const app = new App(routes).getServer();
+      const res = supertest(app)
+        .post(`${secrets.URL_PREFIX}/user/1/update`)
+        .send({ isAdmin: true })
+        .set(
+          'Authorization',
+          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjM4MjE2NjYwLCJleHAiOjE2MzkwODA2NjB9.MkUJMl5skNqZ9XlYm_EHguoIANH7qKdxyeULBOjLFzY',
+        );
+      expect((await res).status).toBe(UNAUTHORIZED);
       expect((await res).body.status).toBe('error');
       expect((await res).body.data).not.toBeDefined();
     });
