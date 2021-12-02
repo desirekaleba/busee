@@ -28,8 +28,6 @@
 - Tailwind
 
 #### Common
-- Git
-- GItHub
 - ESLint
 - Jest
 - Travis CI
