@@ -18,6 +18,7 @@
 #### Backend
 - Node/Express/Typescript: Server
 - Mysql: Primary Storage
+- TypeORM: Object-relational Mapper
 - AWS S3: Blob Storage
 - Stripe: Payment
 - Twilio: Email service
