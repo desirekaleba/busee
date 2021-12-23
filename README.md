@@ -1,6 +1,6 @@
 # busee
 ![ci](https://github.com/desirekaleba/busee/actions/workflows/ci.yaml/badge.svg)
-> Online Bus Booking System
+> Online Bus Booking System REST API
 ### Features
 1. User can Sign up
 2. User can Sign in
@@ -23,18 +23,9 @@
 - AWS S3: Blob Storage
 - Stripe: Payment
 - Twilio: Email service
-
-#### Frontend
-- React
-- Redux
-- Tailwind
-
 #### Common
 - ESLint
 - Jest
-- Travis CI
-- Coverall
-- Docker
 - GitHub actions
 
 
