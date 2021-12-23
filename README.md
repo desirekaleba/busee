@@ -1,5 +1,6 @@
 # busee
 ![ci](https://github.com/desirekaleba/busee/actions/workflows/ci.yaml/badge.svg)
+![codeQL](https://github.com/desirekaleba/busee/actions/workflows/codeql-analysis.yml/badge.svg)
 > Online Bus Booking System REST API
 ### Features
 1. User can Sign up
