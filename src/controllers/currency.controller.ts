@@ -24,7 +24,7 @@ export class CurrencyController {
     const currencies = await this.currencyService.findAll();
     return success({
       code: OK,
-      message: `Found ${currencies.length} user(s).`,
+      message: `Found ${currencies.length} currency(ies).`,
       data: currencies,
       res,
     });
