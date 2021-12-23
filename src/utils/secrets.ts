@@ -29,6 +29,7 @@ const requiredCredentials = [
   'TWILIO_ACCOUNT_SID',
   'TWILIO_AUTH_TOKEN',
   'TWILIO_SERVICE_SID',
+  'URL_PREFIX',
 ];
 
 // eslint-disable-next-line no-restricted-syntax

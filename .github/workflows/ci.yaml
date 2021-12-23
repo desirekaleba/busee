@@ -82,6 +82,10 @@ jobs:
           DEV_DB: ${{ secrets.DEV_DB }}
           TEST_DB: ${{ secrets.TEST_DB }}
           PROD_DB: ${{ secrets.PROD_DB }}
+          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+          TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+          TWILIO_SERVICE_SID: ${{ secrets.TWILIO_SERVICE_SID }}
+          URL_PREFIX: ${{ secrets.URL_PREFIX }}
         run: npm test
 
   build:
