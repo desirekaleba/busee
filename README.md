@@ -23,10 +23,50 @@
 - TypeORM: Object-relational Mapper
 - AWS S3: Blob Storage
 - Stripe: Payment
-- Twilio: Email service
+- Twilio/SendGrid: Email service
 #### Common
 - ESLint
 - Jest
 - GitHub actions
 
+### Getting Started
+You can either fork this repository or Clone It by opening your terminal, navigating where you want to save it and run
+```sh
+git clone https://github.com/desirekaleba/busee.git
+```
+Enter the project folder
+```sh
+cd busee
+```
+Change the file `.env.example` to `.env` and update the variable values with valid ones.
 
+You can set up the project with
+```sh
+npm install
+```
+And run it with
+1.Development
+```sh
+npm run start:dev
+```
+2. Production
+```sh
+npm run build && npm start
+```
+3. Or run test suits with
+```sh
+npm test
+```
+You can as well check for linting erros with
+```sh
+npm run lint
+```
+Or format errors with
+```sh
+npm run format:check
+```
+
+### License
+See the [LICENSE](https://github.com/desirekaleba/busee/blob/main/LICENSE).
+
+PS: **Project still under development...**
