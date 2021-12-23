@@ -66,6 +66,9 @@ Or format errors with
 npm run format:check
 ```
 
+### API documentation
+See the [docs](https://github.com/desirekaleba/busee/wiki/Docs).
+
 ### License
 See the [LICENSE](https://github.com/desirekaleba/busee/blob/main/LICENSE).
 
