@@ -1,45 +1,10 @@
-name: Audit & Build Backend App
+name: Audit, Test & Build Backend App
 on:
   pull_request:
   push:
     branches:
       - main
 jobs:
-  build:
-      name: Build
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout Code
-          uses: actions/checkout@v2
-
-        - name: Use Node.js ${{ matrix.node-version }} on ${{ matrix.os }}
-          uses: actions/setup-node@v1
-          with:
-            node-version: ${{ matrix.node-version }}
-
-        - name: Install Dependencies
-          run: npm install
-
-        - name: Build
-          run: npm run build
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-
-      - name: Use Node.js ${{ matrix.node-version }} on ${{ matrix.os }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Run Lint
-        run: npm run lint
-
   audit:
     name: Audit for Vulnerabilities
     runs-on: ubuntu-latest
@@ -58,8 +23,9 @@ jobs:
       - name: Audit
         run: npm run audit:ci
 
-  test:
-    name: Run tests
+  lint:
+    needs: audit
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -73,5 +39,66 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Test
+      - name: Run Lint
+        run: npm run lint
+
+  test:
+    needs: lint
+    name: Setup DB and run tests
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          MYSQL_DATABASE: ${{ secrets.TEST_DB }}
+        ports:
+          - 33306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+          
+      - name: Use Node.js ${{ matrix.node-version }} on ${{ matrix.os }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run tests
+        env:
+          NODE_ENV: test 
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+          DB_USER: root
+          DB_HOST: localhost
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_PORT: 33306
+          DEV_DB: ${{ secrets.DEV_DB }}
+          TEST_DB: ${{ secrets.TEST_DB }}
+          PROD_DB: ${{ secrets.PROD_DB }}
         run: npm test
+
+  build:
+    needs: test
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }} on ${{ matrix.os }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
