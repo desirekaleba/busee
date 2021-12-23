@@ -3,11 +3,27 @@ on:
   pull_request:
   push:
     branches:
-      - develop
       - main
 jobs:
+  build:
+      name: Build
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout Code
+          uses: actions/checkout@v2
+
+        - name: Use Node.js ${{ matrix.node-version }} on ${{ matrix.os }}
+          uses: actions/setup-node@v1
+          with:
+            node-version: ${{ matrix.node-version }}
+
+        - name: Install Dependencies
+          run: npm install
+
+        - name: Build
+          run: npm run build
   lint:
-    name: Lint and Build
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -23,9 +39,6 @@ jobs:
 
       - name: Run Lint
         run: npm run lint
-
-      - name: Build
-        run: npm run build
 
   audit:
     name: Audit for Vulnerabilities
@@ -44,3 +57,21 @@ jobs:
 
       - name: Audit
         run: npm run audit:ci
+
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }} on ${{ matrix.os }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Test
+        run: npm test
