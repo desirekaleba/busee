@@ -38,7 +38,7 @@ Enter the project folder
 ```sh
 cd busee
 ```
-Change the file `.env.example` to `.env` and update the variable values with valid ones.
+Rename the file `.env.example` to `.env` and update the variable values with valid ones.
 
 You can set up the project with
 ```sh
