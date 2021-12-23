@@ -1,4 +1,4 @@
-name: Audit, Test & Build Backend App
+name: Audit, Test & Build
 on:
   pull_request:
   push:
