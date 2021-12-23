@@ -1,4 +1,5 @@
 # busee
+![ci](https://github.com/desirekaleba/busee/actions/workflows/ci.yaml/badge.svg)
 > Online Bus Booking System
 ### Features
 1. User can Sign up
